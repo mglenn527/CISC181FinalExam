@@ -217,9 +217,7 @@ public class LoanCalcViewController implements Initializable {
 	}
 
 	private boolean ValidateData() {
-		// TODO: Only show one alert message. If there are three errors,
-		// show one Alert with all three errors.
-		// Hint: Use StringBuilder for the 'setContentText' message.
+		// TODO: Only show one alert message. 
 		
 		StringBuilder eMessage = new StringBuilder();
 		
@@ -288,7 +286,7 @@ public class LoanCalcViewController implements Initializable {
 	@FXML
 	private void btnCalcLoan(ActionEvent event) {
 
-		// TODO: Call the method to Clear the Results
+		// TODO: Clear Results
 		btnClearResults(null);
 
 		// Validate the data. If the method returns 'false', exit the method
@@ -314,13 +312,13 @@ public class LoanCalcViewController implements Initializable {
 		NumberFormat fmtCurrency = NumberFormat.getCurrencyInstance(Locale.US);
 		lblTotalPayemnts.setText(fmtCurrency.format(loanExtra.getTotalPayments()));
 		
-		// TODO: Set lblTotalInterest label with loanExtra's total interest payments
+		// TODO: Set lblTotalInterest
 		lblTotalInterest.setText(fmtCurrency.format(loanExtra.getTotalInterest()));
 
-		// TODO: Set lblTotalInterest label with loanExtra's PMT
+		// TODO: Set lblMonthlyPayment
 		lblMonthlyPayment.setText(fmtCurrency.format(loanExtra.GetPMT()));
 
-		// TODO: Set lblInterestSaved to the total interest saved
+		// TODO: Set lblInterestSaved
 		lblInterestSaved.setText(
 				fmtCurrency.format(loanNoExtra.getTotalInterest() - loanExtra.getTotalInterest()));
 		
