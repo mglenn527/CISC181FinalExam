@@ -129,7 +129,9 @@ public class LoanCalcViewController implements Initializable {
 
 		cmbLoanType.getItems().addAll("Home", "Auto", "School");
 
-		// TODO: Default cmbLoanType to select 'Home' as the default loan type
+		// TODO: Default cmbLoanType 
+		
+		cmbLoanType.setValue("Home");
 
 		cmbLoanType.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -189,7 +191,8 @@ public class LoanCalcViewController implements Initializable {
 
 	@FXML
 	private void btnClearResultsKeyPress(KeyEvent event) {
-		// TODO: Call the method to clear the results
+		// TODO: clear results
+		btnClearResults(null);
 	}
 
 	/**
@@ -204,31 +207,75 @@ public class LoanCalcViewController implements Initializable {
 		paymentList.clear();
 		hbChart.getChildren().clear();
 
-		// TODO: Clear all the output labels (lblTotalPayemnts, lblTotalInterest, etc)
+		// TODO: Clear all the output labels 
+		lblTotalInterest.setText("");
+		lblInterestSaved.setText("");
+		lblMonthlyPayment.setText("");
+		lblPaymentsSaved.setText("");
 		lblTotalPayemnts.setText("");
+		
 	}
 
 	private boolean ValidateData() {
 		// TODO: Only show one alert message. If there are three errors,
 		// show one Alert with all three errors.
 		// Hint: Use StringBuilder for the 'setContentText' message.
-
+		
+		StringBuilder eMessage = new StringBuilder();
+		
+		eMessage.append("");
+		
+		boolean alert = false;
+		
 		// Validate LoanAmount isn't empty
-		if (LoanAmount.getText().trim().isEmpty()) {
-			Alert fail = new Alert(AlertType.ERROR);
-			fail.setHeaderText("Missing Data");
-			fail.setContentText("Loan Amount is required");
-			fail.showAndWait();
-			return false;
+		// TODO: Validate LoanAmount
+		if (LoanAmount.getText().trim().isEmpty() || !(Double.parseDouble(LoanAmount.getText().trim()) > 0)) {
+			eMessage.append("Loan Amount is Required \n");
+			alert = true;
 		}
 
-		// TODO: Validate LoanAmount is a positive double
-		// TODO: Validate InterestRate is not blank and is a positive double. Validate
-		// that the value is between 1 and 30 (2.99 = 2.99%, not 0.0299)
-		// TODO: Validate NbrOfYears is a non blank positive integer
-		// TODO: Validate AdditionalPayment, if given, is a positive double
-		// TODO: Validate EscrowAmount, if given, is a positive double
+		// TODO: Validate InterestRate 
+		if (InterestRate.getText().trim().isEmpty() || !(Double.valueOf(InterestRate.getText().trim()) > 0)) {
+			
+			eMessage.append("Valid Interest Rate is Required \n");
+			alert = true;
+			
+		}
+		// TODO: Validate NbrOfYears 
+		if(NbrOfYears.getText().trim().isEmpty() || !(Integer.valueOf(NbrOfYears.getText().trim()) > 0)) {
+			
+			eMessage.append("Valid Term of Loan / Years Required \n");
+			alert = true;
+			
+		}
+		
+		// TODO: Validate AdditionalPayment
+		if(!(AdditionalPayment.getText().trim().isEmpty()) 
+				&& !(Double.valueOf(AdditionalPayment.getText().trim()) > 0)) {
+			
+			eMessage.append("Valid Additional Payment Required \n");
+			alert = true;
+			
+		}
+		
+		// TODO: Validate EscrowAmount
+		if(!(EscrowAmount.getText().trim().isEmpty()) 
+				&& !(Double.valueOf(EscrowAmount.getText().trim()) > 0)) {
+			
+			eMessage.append("Valid Escrow Amount Required \n");
+			alert = true;
+			
+		}
 
+		if(alert) {
+			
+			Alert fail = new Alert(AlertType.ERROR);
+			fail.setHeaderText("Validation Error");
+			fail.setContentText(eMessage.toString());
+			fail.showAndWait();
+			return false;
+			
+		}
 		return true;
 	}
 
@@ -242,6 +289,7 @@ public class LoanCalcViewController implements Initializable {
 	private void btnCalcLoan(ActionEvent event) {
 
 		// TODO: Call the method to Clear the Results
+		btnClearResults(null);
 
 		// Validate the data. If the method returns 'false', exit the method
 		if (ValidateData() == false)
@@ -265,15 +313,20 @@ public class LoanCalcViewController implements Initializable {
 
 		NumberFormat fmtCurrency = NumberFormat.getCurrencyInstance(Locale.US);
 		lblTotalPayemnts.setText(fmtCurrency.format(loanExtra.getTotalPayments()));
+		
 		// TODO: Set lblTotalInterest label with loanExtra's total interest payments
+		lblTotalInterest.setText(fmtCurrency.format(loanExtra.getTotalInterest()));
 
 		// TODO: Set lblTotalInterest label with loanExtra's PMT
+		lblMonthlyPayment.setText(fmtCurrency.format(loanExtra.GetPMT()));
 
 		// TODO: Set lblInterestSaved to the total interest saved
-
+		lblInterestSaved.setText(
+				fmtCurrency.format(loanNoExtra.getTotalInterest() - loanExtra.getTotalInterest()));
+		
 		lblPaymentsSaved
 				.setText(String.valueOf(loanNoExtra.getLoanPayments().size() - loanExtra.getLoanPayments().size()));
-
+		
 		XYChart.Series seriesExtra = new XYChart.Series();
 		XYChart.Series seriesNoExtra = new XYChart.Series();
 
