@@ -217,7 +217,7 @@ public class LoanCalcViewController implements Initializable {
 	}
 
 	private boolean ValidateData() {
-		// TODO: Only show one alert message. 
+		// TODO: Only show one alert message.
 		
 		StringBuilder eMessage = new StringBuilder();
 		
